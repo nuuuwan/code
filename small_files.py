@@ -4,39 +4,55 @@ from utils import File, Log
 
 log = Log('small_files')
 VALID_EXT_LIST = ['.py', '.js']
-N_LINES_INFO, N_LINES_WARNING, N_LINES_ERROR = 100, 150, 200
 
 
-def process_file(file_path):
+def get_n_lines(file_path) -> int:
     ext = os.path.splitext(file_path)[1]
     if ext not in VALID_EXT_LIST:
-        return
+        return None
 
     lines = File(file_path).read_lines()
     n_lines = len(lines)
+    if n_lines <= 100:
+        return None
 
-    message = f'{n_lines} {file_path} '
-    if n_lines > N_LINES_ERROR:
-        logger = log.error
-    elif n_lines > N_LINES_WARNING:
-        logger = log.warning
-    elif n_lines > N_LINES_INFO:
-        logger = log.info
-    else:
-        return
-
-    logger(message)
+    return n_lines
 
 
-def process_dir(dir_path=None):
-    dir_path = dir_path or os.getcwd()
+def get_long_file_info(dir_path):
+    long_file_info_list = []
     for name_only in os.listdir(dir_path):
         dir_or_file_path = os.path.join(dir_path, name_only)
         if os.path.isdir(dir_or_file_path):
-            process_dir(dir_or_file_path)
+            long_file_info_list += get_long_file_info(dir_or_file_path)
         else:
-            process_file(dir_or_file_path)
+            n_lines = get_n_lines(dir_or_file_path)
+            if n_lines:
+                long_file_info_list.append(
+                    dict(file_path=dir_or_file_path, n_lines=n_lines)
+                )
+    return long_file_info_list
+
+
+def main():
+    root_path = os.getcwd()
+    long_file_info_list = get_long_file_info(root_path)
+    if not long_file_info_list:
+        return 
+    
+    print('-' * 32)
+    print('LONG FILES')
+    print('-' * 32)
+    sorted_long_file_info_list = sorted(
+        long_file_info_list, key=lambda x: x['n_lines'], reverse=True
+    )
+    for long_file_info in sorted_long_file_info_list:
+        print(
+            long_file_info['n_lines'],
+            long_file_info['file_path'].replace(root_path, '')[1:],
+        )
+    print('-' * 32)
 
 
 if __name__ == '__main__':
-    process_dir()
+    main()
