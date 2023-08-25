@@ -1,8 +1,7 @@
 import os
 
-from utils import File, Log
+from utils import File
 
-log = Log('small_files')
 VALID_EXT_LIST = ['.py', '.js']
 INVALID_KEYWORD_LIST = ['node_modules', '.git', '.idea']
 
