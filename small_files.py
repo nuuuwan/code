@@ -55,7 +55,7 @@ def main():
         long_file_info_list, key=lambda x: x['n_lines'], reverse=True
     )
     for long_file_info in sorted_long_file_info_list:
-        if long_file_info['n_lines'] <= 50:
+        if long_file_info['n_lines'] <= 100:
             continue
         print(
             long_file_info['n_lines'],
