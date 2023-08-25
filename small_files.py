@@ -12,9 +12,9 @@ def is_valid_path(dir_or_file_path: str) -> bool:
     return True
 
 
-def get_n_lines(file_path) -> int:
+def is_valid_file_ext(file_path: str) -> bool:
     ext = os.path.splitext(file_path)[1]
-    if ext not in VALID_EXT_LIST:
+    return ext in VALID_EXT_LIST
         return None
 
     lines = File(file_path).read_lines()
