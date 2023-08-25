@@ -4,6 +4,12 @@ from utils import File, Log
 
 log = Log('small_files')
 VALID_EXT_LIST = ['.py', '.js']
+def is_valid_path(dir_or_file_path: str) -> bool:
+    for invalid_keyword in INVALID_KEYWORD_LIST:
+        if invalid_keyword in dir_or_file_path:
+            return False
+
+    return True
 
 
 def get_n_lines(file_path) -> int:
