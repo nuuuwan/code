@@ -4,6 +4,9 @@ from utils import File, Log
 
 log = Log('small_files')
 VALID_EXT_LIST = ['.py', '.js']
+INVALID_KEYWORD_LIST = ['node_modules', '.git', '.idea']
+
+
 def is_valid_path(dir_or_file_path: str) -> bool:
     for invalid_keyword in INVALID_KEYWORD_LIST:
         if invalid_keyword in dir_or_file_path:
@@ -15,6 +18,10 @@ def is_valid_path(dir_or_file_path: str) -> bool:
 def is_valid_file_ext(file_path: str) -> bool:
     ext = os.path.splitext(file_path)[1]
     return ext in VALID_EXT_LIST
+
+
+def get_n_lines(file_path: str) -> int:
+    if not is_valid_file_ext(file_path):
         return None
 
     lines = File(file_path).read_lines()
@@ -29,6 +36,9 @@ def get_long_file_info(dir_path):
     long_file_info_list = []
     for name_only in os.listdir(dir_path):
         dir_or_file_path = os.path.join(dir_path, name_only)
+        if is_valid_path(dir_or_file_path):
+            continue
+
         if os.path.isdir(dir_or_file_path):
             long_file_info_list += get_long_file_info(dir_or_file_path)
         else:
@@ -44,8 +54,9 @@ def main():
     root_path = os.getcwd()
     long_file_info_list = get_long_file_info(root_path)
     if not long_file_info_list:
-        return 
-    
+        return
+
+    print(' ')
     print('-' * 32)
     print('LONG FILES')
     print('-' * 32)
@@ -57,7 +68,9 @@ def main():
             long_file_info['n_lines'],
             long_file_info['file_path'].replace(root_path, '')[1:],
         )
+    print(' ')
     print('-' * 32)
+    print(' ')
 
 
 if __name__ == '__main__':
