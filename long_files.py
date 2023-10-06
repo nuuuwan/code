@@ -11,6 +11,11 @@ def is_valid_path(dir_or_file_path: str) -> bool:
         if invalid_keyword in dir_or_file_path:
             return False
 
+    # Ignore All Caps Names
+    file_name_only = os.path.basename(dir_or_file_path).split('.')[0]
+    if file_name_only == file_name_only.upper():
+        return False
+
     return True
 
 
