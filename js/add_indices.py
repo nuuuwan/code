@@ -43,7 +43,7 @@ def main():
         lines.append('')
         lines.append('export {')
         for class_name in class_name_list:
-            lines.append(f'    {class_name},')
+            lines.append(f'  {class_name},')
         lines.append('}')
         lines.append('')
 
