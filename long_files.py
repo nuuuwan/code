@@ -6,6 +6,7 @@ VALID_EXT_LIST = ['.py', '.js']
 INVALID_KEYWORD_LIST = ['node_modules', '.git', '.idea']
 MIN_N_LINES_DISPLAY = 50
 
+
 def is_valid_path(dir_or_file_path: str) -> bool:
     for invalid_keyword in INVALID_KEYWORD_LIST:
         if invalid_keyword in dir_or_file_path:
@@ -45,6 +46,7 @@ def get_long_file_info(dir_path):
     long_file_info_list = []
     for name_only in os.listdir(dir_path):
         dir_or_file_path = os.path.join(dir_path, name_only)
+
         if not is_valid_path(dir_or_file_path):
             continue
 
