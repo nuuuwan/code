@@ -4,7 +4,7 @@ from utils import File
 
 VALID_EXT_LIST = ['.py', '.js']
 INVALID_KEYWORD_LIST = ['node_modules', '.git', '.idea']
-
+MIN_N_LINES_DISPLAY = 50
 
 def is_valid_path(dir_or_file_path: str) -> bool:
     for invalid_keyword in INVALID_KEYWORD_LIST:
@@ -36,7 +36,9 @@ def get_emoji(n):
         return '🟠'
     if n >= 100:
         return '🟡'
-    return '🟢'
+    if n >= 50:
+        return '🟢'
+    return '🔵'
 
 
 def get_long_file_info(dir_path):
@@ -74,7 +76,7 @@ def main():
     print(f'{total_n_lines:,}', 'lines in TOTAL')
 
     for long_file_info in sorted_long_file_info_list:
-        if long_file_info['n_lines'] <= 100:
+        if long_file_info['n_lines'] <= MIN_N_LINES_DISPLAY:
             continue
         print(
             long_file_info['emoji'],
