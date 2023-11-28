@@ -4,7 +4,7 @@ from utils import File
 
 VALID_EXT_LIST = ['.py', '.js']
 INVALID_KEYWORD_LIST = ['node_modules', '.git', '.idea']
-MIN_N_LINES_DISPLAY = 50
+MIN_N_LINES_DISPLAY = 40
 
 
 def is_valid_path(dir_or_file_path: str) -> bool:
@@ -37,7 +37,7 @@ def get_emoji(n):
         return '🟠'
     if n >= 100:
         return '🟡'
-    if n >= 50:
+    if n >= 40:
         return '🟢'
     return '🔵'
 
