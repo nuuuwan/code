@@ -13,7 +13,11 @@ def main():
     with mock.patch.object(setuptools, 'setup') as mock_setup:
         pass
 
-        _, kwargs = mock_setup.call_args
+        call_args = mock_setup.call_args
+        if not call_args:
+            return
+        
+        _, kwargs = call_args
         install_requires = kwargs.get('install_requires', [])
         file_path = 'requirements.txt'
         File(file_path).write_lines(
