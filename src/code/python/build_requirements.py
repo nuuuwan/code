@@ -16,7 +16,7 @@ def main():
         call_args = mock_setup.call_args
         if not call_args:
             return
-        
+
         _, kwargs = call_args
         install_requires = kwargs.get('install_requires', [])
         file_path = 'requirements.txt'
