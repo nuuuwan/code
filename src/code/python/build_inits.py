@@ -5,6 +5,16 @@ NO_AUTO = '# no-auto'
 
 
 def build_for_dir(dir_src, dir_code):
+    init_py_path = os.path.join(dir_code, '__init__.py')
+    old_content = None
+    if os.path.exists(init_py_path):
+        with open(init_py_path, 'r') as file:
+            old_content = file.read()
+
+        if NO_AUTO in old_content:
+            print(f'⚠️ [{NO_AUTO}] {init_py_path}')
+            return
+
     high_module_name = (
         dir_code.replace(dir_src + '\\', '')
         .replace('/', '.')
@@ -66,16 +76,9 @@ def build_for_dir(dir_src, dir_code):
         lines.extend(child_modules_lines)
         lines.append('')
 
-    init_py_path = os.path.join(dir_code, '__init__.py')
-    if os.path.exists(init_py_path):
-        content = None
-        with open(init_py_path, 'r') as file:
-            content = file.read()
-
-        if NO_AUTO in content:
-            print(f'⚠️ {init_py_path} is marked as {NO_AUTO}')
-            return
-
+    new_content = '\n'.join(lines)
+    if old_content == new_content:
+        return
     with open(init_py_path, 'w') as file:
         file.write('\n'.join(lines))
         print(f'Wrote {init_py_path}')
