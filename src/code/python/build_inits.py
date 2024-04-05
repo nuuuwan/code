@@ -1,9 +1,7 @@
 import os
 import sys
 
-from utils import File, Log
-
-log = Log('build_inits')
+NO_AUTO = '# no-auto'
 
 
 def build_for_dir(dir_src, dir_code):
@@ -69,8 +67,18 @@ def build_for_dir(dir_src, dir_code):
         lines.append('')
 
     init_py_path = os.path.join(dir_code, '__init__.py')
-    File(init_py_path).write_lines(lines)
-    log.debug(f'Wrote {init_py_path}')
+    if os.path.exists(init_py_path):
+        content = None
+        with open(init_py_path, 'r') as file:
+            content = file.read()
+
+        if NO_AUTO in content:
+            print(f'⚠️ {init_py_path} is marked as {NO_AUTO}')
+            return
+
+    with open(init_py_path, 'w') as file:
+        file.write('\n'.join(lines))
+        print(f'Wrote {init_py_path}')
 
 
 def main(dir_root: str):

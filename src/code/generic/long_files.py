@@ -1,7 +1,5 @@
 import os
 
-from utils import File
-
 VALID_EXT_LIST = ['.py', '.js']
 INVALID_KEYWORD_LIST = ['node_modules', '.git', '.idea']
 MIN_N_LINES_DISPLAY = 40
@@ -26,7 +24,10 @@ def is_valid_file_ext(file_path: str) -> bool:
 
 
 def get_n_lines(file_path: str) -> int:
-    lines = File(file_path).read_lines()
+    content = None
+    with open(file_path, mode='r', encoding="utf8") as file:
+        content = file.read()
+    lines = content.split('\n')
     return len(lines)
 
 

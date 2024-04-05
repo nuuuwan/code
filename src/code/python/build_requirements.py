@@ -2,9 +2,6 @@ import os
 from unittest import mock
 
 import setuptools
-from utils import File, Log
-
-log = Log('build requirements')
 
 
 def main():
@@ -20,10 +17,13 @@ def main():
         _, kwargs = call_args
         install_requires = kwargs.get('install_requires', [])
         file_path = 'requirements.txt'
-        File(file_path).write_lines(
-            ['# Autogenerate by build_requirements'] + install_requires
-        )
-        log.info(f'Wrote {len(install_requires)} dependencies to {file_path}')
+        lines = ['# Autogenerate by build_requirements'] + install_requires
+
+        with open(file_path, 'w') as file:
+            file.write('\n'.join(lines))
+            print(
+                f'Wrote {len(install_requires)} dependencies to {file_path}'
+            )
 
 
 if __name__ == '__main__':
