@@ -86,7 +86,9 @@ def build_for_dir(dir_src, dir_code):
 
 def main(dir_root: str):
     dir_src = os.path.join(dir_root, 'src')
-    assert os.path.exists(dir_src), f'{dir_src} does not exist'
+    if not os.path.exists(dir_src):
+        print(f'{dir_src} does not exist')
+        sys.exit(-1)
 
     for dir_code, __, __ in os.walk(dir_src):
         if '__pycache__' in dir_code:
