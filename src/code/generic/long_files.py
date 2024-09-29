@@ -1,8 +1,8 @@
 import os
 
 VALID_EXT_LIST = ['.py', '.js']
-INVALID_KEYWORD_LIST = ['node_modules', '.git', '.idea']
-MIN_N_LINES_DISPLAY = 100
+INVALID_KEYWORD_LIST = ['node_modules', '.git', '.idea', 'index.js', 'setupTests.js']
+N_LINES_NORMAL_MIN, N_LINES_NORMAL_MAX = 10, 100
 
 
 def is_valid_path(dir_or_file_path: str) -> bool:
@@ -38,9 +38,13 @@ def get_emoji(n):
         return '🟠'
     if n >= 100:
         return '🟡'
-    if n >= 40:
-        return '🟢'
-    return '🔵'
+    
+    if n < 10:
+        return '🔵'
+    if n < 5:
+        return '🟣' 
+    
+    return '🟢'
 
 
 def get_long_file_info(dir_path):
@@ -53,18 +57,20 @@ def get_long_file_info(dir_path):
 
         if os.path.isdir(dir_or_file_path):
             long_file_info_list.extend(get_long_file_info(dir_or_file_path))
-        else:
-            if not is_valid_file_ext(dir_or_file_path):
-                continue
-            n_lines = get_n_lines(dir_or_file_path)
-            emoji = get_emoji(n_lines)
-            long_file_info_list.append(
-                dict(
-                    file_path=dir_or_file_path,
-                    n_lines=n_lines,
-                    emoji=emoji,
-                )
+            continue
+        
+        if not is_valid_file_ext(dir_or_file_path):
+            continue
+        
+        n_lines = get_n_lines(dir_or_file_path)
+        emoji = get_emoji(n_lines)
+        long_file_info_list.append(
+            dict(
+                file_path=dir_or_file_path,
+                n_lines=n_lines,
+                emoji=emoji,
             )
+        )
     return long_file_info_list
 
 
@@ -79,7 +85,7 @@ def main():
     print(f'{total_n_lines:,}', 'lines in TOTAL')
 
     for long_file_info in sorted_long_file_info_list:
-        if long_file_info['n_lines'] <= MIN_N_LINES_DISPLAY:
+        if N_LINES_NORMAL_MIN <= long_file_info['n_lines'] <  N_LINES_NORMAL_MAX:
             continue
         print(
             long_file_info['emoji'],

@@ -1,4 +1,5 @@
 import os
+import re
 
 from utils import File, Log
 
@@ -7,10 +8,9 @@ SUB_DIRS = [
     os.path.join('nonview', 'base'),
     os.path.join('nonview', 'core'),
     os.path.join('nonview', 'constants'),
+    os.path.join('view', '_constants'),
     os.path.join('view', 'atoms'),
     os.path.join('view', 'molecules'),
-    os.path.join('view', 'organisms'),
-    os.path.join('view', 'pages'),
 ]
 log = Log('add indices')
 
@@ -24,14 +24,25 @@ def build_index(dir_path, class_name_list, is_singleton):
         class_name = class_name_list[0]
         lines.append(f'export default {class_name};')
     else:
-        lines.append('export {')
+        export_lines = []
+        export_lines.append('export {')
         for class_name in class_name_list:
-            lines.append(f'  {class_name},')
-        lines.append('};')
-    lines.append('')
+            export_lines.append(f'  {class_name},')
+        export_lines.append('};')
+
+        export_content = '\n'.join(export_lines)
+        if len(export_content) < 80:
+            export_content = export_content.replace('\n', ' ')
+
+        lines.append(export_content)
+
+    lines.append("")
 
     file_path = os.path.join(dir_path, 'index.js')
-    File(file_path).write_lines(lines)
+    content = '\n'.join(lines)
+    content = re.sub(r'   ', ' ', content)
+    content = content.replace(', }', ' }')
+    File(file_path).write(content)
     # log.info(f'Wrote {len(class_name_list)} classes to {file_path}')
 
 
