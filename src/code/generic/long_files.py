@@ -7,6 +7,7 @@ INVALID_KEYWORD_LIST = [
     '.idea',
     'index.js',
     'setupTests.js',
+    '__init__.py'
 ]
 N_LINES_NORMAL_MIN, N_LINES_NORMAL_MAX = 10, 100
 
