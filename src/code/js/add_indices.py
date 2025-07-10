@@ -9,8 +9,10 @@ SUB_DIRS = [
     os.path.join("nonview", "core"),
     os.path.join("nonview", "constants"),
     os.path.join("view", "base"),
+    os.path.join("view", "core"),
     os.path.join("view", "cumulative"),
     os.path.join("view", "features"),
+    os.path.join("view", "pages"),
 ]
 log = Log("add indices")
 
