@@ -5,12 +5,12 @@ from utils import File, Log
 
 DIR_SRC = "src"
 SUB_DIRS = [
-    os.path.join("nonview", "utils"),
+    os.path.join("nonview", "base"),
     os.path.join("nonview", "core"),
-    os.path.join("nonview", "constants"),
+    os.path.join("nonview", "cons"),
     os.path.join("view", "atoms"),
-    os.path.join("view", "molecules"),
-    os.path.join("view", "organisms"),
+    os.path.join("view", "moles"),
+    os.path.join("view", "orgas"),
     os.path.join("view", "pages"),
 ]
 log = Log("add indices")
