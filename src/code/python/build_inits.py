@@ -95,7 +95,7 @@ def main(dir_root: str):
     dir_src = os.path.join(dir_root, "src")
     if not os.path.exists(dir_src):
         print(f"{dir_src} does not exist")
-        sys.exit(-1)
+        sys.exit(0)
 
     for dir_code, __, __ in os.walk(dir_src):
         if "__pycache__" in dir_code:

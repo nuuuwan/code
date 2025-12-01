@@ -1,13 +1,13 @@
 import os
 
-VALID_EXT_LIST = ['.py', '.js']
+VALID_EXT_LIST = [".py", ".js"]
 INVALID_KEYWORD_LIST = [
-    'node_modules',
-    '.git',
-    '.idea',
-    'index.js',
-    'setupTests.js',
-    '__init__.py'
+    "node_modules",
+    ".git",
+    ".idea",
+    "index.js",
+    "setupTests.js",
+    "__init__.py",
 ]
 N_LINES_NORMAL_MIN, N_LINES_NORMAL_MAX = 10, 100
 
@@ -18,7 +18,7 @@ def is_valid_path(dir_or_file_path: str) -> bool:
             return False
 
     # Ignore All Caps Names
-    file_name_only = os.path.basename(dir_or_file_path).split('.')[0]
+    file_name_only = os.path.basename(dir_or_file_path).split(".")[0]
     if file_name_only == file_name_only.upper():
         return False
 
@@ -32,26 +32,21 @@ def is_valid_file_ext(file_path: str) -> bool:
 
 def get_n_lines(file_path: str) -> int:
     content = None
-    with open(file_path, mode='r', encoding="utf8") as file:
+    with open(file_path, mode="r", encoding="utf8") as file:
         content = file.read()
-    lines = content.split('\n')
+    lines = content.split("\n")
     return len(lines)
 
 
 def get_emoji(n):
     if n >= 200:
-        return '🔴'
+        return "🔴"
     if n >= 150:
-        return '🟠'
+        return "🟠"
     if n >= 100:
-        return '🟡'
+        return "🟡"
 
-    if n < 10:
-        return '🔵'
-    if n < 5:
-        return '🟣'
-
-    return '🟢'
+    return None
 
 
 def get_long_file_info(dir_path):
@@ -85,25 +80,22 @@ def main():
     root_path = os.getcwd()
     long_file_info_list = get_long_file_info(root_path)
     sorted_long_file_info_list = sorted(
-        long_file_info_list, key=lambda x: x['n_lines'], 
+        long_file_info_list,
+        key=lambda x: x["n_lines"],
     )
 
-    total_n_lines = sum([x['n_lines'] for x in long_file_info_list])
-    print(f'{total_n_lines:,}', 'lines in TOTAL')
+    total_n_lines = sum([x["n_lines"] for x in long_file_info_list])
+    print(f"{total_n_lines:,}", "lines in TOTAL")
 
     for long_file_info in sorted_long_file_info_list:
-        if (
-            N_LINES_NORMAL_MIN
-            <= long_file_info['n_lines']
-            < N_LINES_NORMAL_MAX
-        ):
+        if long_file_info["n_lines"] < N_LINES_NORMAL_MAX:
             continue
         print(
-            long_file_info['emoji'],
-            long_file_info['n_lines'],
-            long_file_info['file_path'].replace(root_path, '')[1:],
+            long_file_info["emoji"],
+            long_file_info["n_lines"],
+            long_file_info["file_path"].replace(root_path, "")[1:],
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
