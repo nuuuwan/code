@@ -4,16 +4,13 @@ import re
 from utils import File, Log
 
 DIR_SRC = "src"
-SUB_DIRS = [
-    os.path.join("nonview", "base"),
-    os.path.join("nonview", "core"),
-    os.path.join("nonview", "cons"),
-    os.path.join("view", "_cons"),
-    os.path.join("view", "atoms"),
-    os.path.join("view", "moles"),
-    os.path.join("view", "orgas"),
-    os.path.join("view", "pages"),
-]
+
+
+def get_subdirs(path):
+    for _, dirs, _ in os.walk(path):
+        return dirs
+
+
 log = Log("add indices")
 
 
@@ -44,8 +41,9 @@ def build_index(dir_path, class_name_list, is_singleton):
     content = "\n".join(lines)
     content = re.sub(r"   ", " ", content)
     content = content.replace(", }", " }")
-    File(file_path).write(content)
-    # log.info(f'Wrote {len(class_name_list)} classes to {file_path}')
+    index_file = File(file_path)
+    index_file.write(content)
+    log.info(f"Wrote {file_path}")
 
 
 def get_class_name_list(dir_sub: str) -> list[str]:
@@ -69,7 +67,7 @@ def get_class_name_list(dir_sub: str) -> list[str]:
 
 def main():
     assert os.path.exists(DIR_SRC)
-    for sub_dir in SUB_DIRS:
+    for sub_dir in get_subdirs(DIR_SRC):
         dir_sub = os.path.join(DIR_SRC, sub_dir)
         if not os.path.exists(dir_sub):
             continue
