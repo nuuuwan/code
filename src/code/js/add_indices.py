@@ -6,9 +6,13 @@ from utils import File, Log
 DIR_SRC = "src"
 
 
-def get_subdirs(path):
-    for _, dirs, _ in os.walk(path):
-        return dirs
+def get_dir_subs(root_dir_path: str) -> list[str]:
+    dirs_all = []
+    for dir_path, dir_names, _ in os.walk(root_dir_path):
+        for dir_name in dir_names:
+            dirs_all.append(os.path.join(dir_path, dir_name))
+    dirs_all.sort()
+    return dirs_all
 
 
 log = Log("add indices")
@@ -43,7 +47,7 @@ def build_index(dir_path, class_name_list, is_singleton):
     content = content.replace(", }", " }")
     index_file = File(file_path)
     index_file.write(content)
-    log.info(f"Wrote {file_path}")
+    log.info(f"Wrote {index_file}")
 
 
 def get_class_name_list(dir_sub: str) -> list[str]:
@@ -52,23 +56,25 @@ def get_class_name_list(dir_sub: str) -> list[str]:
         child_path = os.path.join(dir_sub, child_name)
         if os.path.isdir(child_path):
             class_name = child_name
-            class_name_list.append(class_name)
+            if child_name[0] == child_name[0].upper():
+                class_name_list.append(class_name)
             build_index(child_path, [class_name], True)
         else:
             if not child_name.endswith(".js"):
                 continue
             if child_name == "index.js":
                 continue
-            class_name = child_name[:-3]
-            class_name_list.append(class_name)
+            if child_name[0] == child_name[0].upper():
+                class_name = child_name[:-3]
+                class_name_list.append(class_name)
     class_name_list.sort()
     return class_name_list
 
 
 def main():
     assert os.path.exists(DIR_SRC)
-    for sub_dir in get_subdirs(DIR_SRC):
-        dir_sub = os.path.join(DIR_SRC, sub_dir)
+    for dir_sub in get_dir_subs(DIR_SRC):
+
         if not os.path.exists(dir_sub):
             continue
 
