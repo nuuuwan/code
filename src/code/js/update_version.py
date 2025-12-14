@@ -1,20 +1,17 @@
 import os
 
-from utils import File as UtilsFile
-from utils import Hash, Log, Time, TimeFormat
+from utils import File, Hash, Log, Time, TimeFormat
 
 log = Log("js/update_version")
 
 
-class File(UtilsFile):
+class SmartFile(File):
     def has_changed(self, content):
         if not self.exists:
             return True
         existing_content = self.read()
         h_existing = Hash.md5(existing_content)
         h_new = Hash.md5(content)
-        log.debug(f"Existing hash: {h_existing}")
-        log.debug(f"New hash     : {h_new}")
         return h_existing != h_new
 
     def write_if_changed(self, content):
@@ -26,7 +23,7 @@ class File(UtilsFile):
 
 def main():
     VERSION_FILE_PATH = os.path.join("src", "nonview", "cons", "VERSION.js")
-    Q = 30 * 60
+    Q = 10 * 60
     time_rounded = Time(Q * int(Time.now().ut / Q))
     datetime_str = TimeFormat("%Y-%m-%d %H:00").stringify(time_rounded)
     content = "\n".join(
@@ -41,8 +38,9 @@ def main():
             "",
         ]
     )
-    if File(VERSION_FILE_PATH).write_if_changed(content):
-        log.info(f"Updated {VERSION_FILE_PATH} to {datetime_str}")
+    version_file = SmartFile(VERSION_FILE_PATH)
+    if version_file.write_if_changed(content):
+        log.info(f"Updated {version_file} to {datetime_str}")
 
 
 if __name__ == "__main__":
