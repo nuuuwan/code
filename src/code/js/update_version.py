@@ -23,7 +23,7 @@ class SmartFile(File):
 
 def main():
     VERSION_FILE_PATH = os.path.join("src", "nonview", "cons", "VERSION.js")
-    Q = 10 * 60
+    Q = 5 * 60
     time_rounded = Time(Q * int(Time.now().ut / Q))
     datetime_str = TimeFormat("%Y-%m-%d %H:00").stringify(time_rounded)
     content = "\n".join(
